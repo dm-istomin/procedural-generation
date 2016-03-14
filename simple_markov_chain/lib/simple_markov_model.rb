@@ -1,9 +1,15 @@
+EXCLUDE_WORDS = [
+  'Mr.', 'mr.', 'mrs.', 'Mrs.', 'st.', 'St.', 'dr.', 'Dr.',
+  '1.', '2.', '3.', '4.', '5.', '6.', '7.', '8.', '9.', '10.'
+]
+
 class Parser
   def self.from_txt(filename)
     File.open(filename, 'r').read
-      .gsub('"', '')
-      .gsub(/\n|\r/, ' ')[1257..-2000] # This is a bit specific, to filter out Gutenberg copyright stuff
-      .gsub(/\s+/, ' ')
+      .gsub(Regexp.union(EXCLUDE_WORDS), '')
+      .gsub(/"|'/, '')
+      .downcase
+      .gsub(/\s+/, ' ')[1257..-2000] # This is a bit specific, to filter out Gutenberg copyright stuff
   end
 end
 
